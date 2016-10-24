@@ -1,3 +1,24 @@
 #!/usr/bin/env ruby
 
-# find movie details with OMDb
+require 'optparse'
+
+require_relative '../app/services/look_up_movie'
+
+options = Struct.new(:year, :title).new
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename $0} [OPTIONS] MOVIE TITLE SEARCH TERMS"
+
+  opts.on('-yYEAR', '--year=YEAR', 'The year the movie was made') do |year|
+    options[:year] = year
+  end
+
+  opts.on('-h', '--help', 'Print this help') do
+    puts opts
+    exit
+  end
+end.parse!
+
+options[:title] = ARGV.join(' ')
+
+Services::LookUpMovie.call(options.to_h)
