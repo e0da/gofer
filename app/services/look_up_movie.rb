@@ -6,6 +6,7 @@ module Services
 
   class LookUpMovie
 
+    API_KEY = ENV['OMDB_API_KEY']
     URI_TEMPLATE = 'http://www.omdbapi.com/?%{params}'.freeze
 
     private_class_method :new
@@ -37,7 +38,8 @@ module Services
     end
 
     def params
-      URI.encode({t: @title, y: @year}.map{|k,v| "#{k}=#{v}"}.join('&'))
+      parameters = {t: @title, y: @year, apikey: API_KEY}
+      URI.encode(parameters.map{|k,v| "#{k}=#{v}"}.join('&'))
     end
 
     def uri
